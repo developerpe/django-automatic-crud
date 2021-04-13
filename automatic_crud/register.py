@@ -1,6 +1,11 @@
 from django.apps import apps
 
 def register_models():
+    """
+    Register models with automatic cruds excluding models with exclude_model = True
+    Return urlspatterns with automatic cruds
+    """
+
     urlpatterns = []
     exclude_models = ['ContentType','LogEntry','Session','Permission','Group']
     models = apps.get_models()
