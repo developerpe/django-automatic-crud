@@ -41,7 +41,7 @@ class BaseListAJAX(BaseCrud):
                 'objects': # list of records
             }
 
-        For more detailed information see: https://www.youtube.com/watch?v=89Ur7GCyLxI
+        For more information see: https://www.youtube.com/watch?v=89Ur7GCyLxI
 
         """
 
