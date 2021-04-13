@@ -1,0 +1,6 @@
+asgiref==3.3.1
+Django==3.1.7
+et-xmlfile==1.0.1
+openpyxl==3.0.7
+pytz==2021.1
+sqlparse==0.4.1
