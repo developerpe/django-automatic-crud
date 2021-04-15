@@ -16,11 +16,15 @@ class BaseModel(models.Model):
     model_state = models.BooleanField(default = True)
     date_created = models.DateTimeField('Fecha de Creación', auto_now=False, auto_now_add=True)
     date_modified = models.DateTimeField('Fecha de Modificación', auto_now=True, auto_now_add=False)
-    date_deleted = models.DateTimeField('Fecha de Eliminación', auto_now=True, auto_now_add=False)
+    date_deleted = models.DateTimeField('Fecha de Eliminación', auto_now=True, auto_now_add=False)  
     
-    exclude_fields = ['date_created','date_modified','date_deleted','state']
-    exclude_model = False
     server_side = False
+    exclude_model = False
+    login_required = False
+    permission_required = ()
+    model_permissions = False
+    default_permissions = False
+    exclude_fields = ['date_created','date_modified','date_deleted','state']
 
     success_create_message = "registrado correctamente!"
     success_update_message = "actualizado correctamente!"

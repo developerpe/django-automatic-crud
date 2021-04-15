@@ -91,6 +91,15 @@ class BaseListAJAX(BaseCrud):
 
 
         self.model = model
+
+        validation_login_required,response = self.validate_login_required()
+        if validation_login_required:
+            return response
+        
+        validation_permissions,response = self.validate_permissions()
+        if validation_permissions:
+            return response
+
         if self.model.server_side:
             self.server_side()
         else:            
@@ -100,14 +109,22 @@ class BaseListAJAX(BaseCrud):
             self.normalize_data()
         return HttpResponse(self.data, content_type="application/json")
 
-class BaseCreateAJAX(View):
+class BaseCreateAJAX(BaseCrud):
     model = None
     form_class = None
 
     def post(self,request,model,form = None,*args,**kwargs):
         self.model = model
-        self.form_class = get_form(form,self.model)
+
+        validation_login_required,response = self.validate_login_required()
+        if validation_login_required:
+            return response
         
+        validation_permissions,response = self.validate_permissions()
+        if validation_permissions:
+            return response
+        
+        self.form_class = get_form(form,self.model)        
         form = self.form_class(request.POST,request.FILES)        
         if form.is_valid():
             form.save()
@@ -118,6 +135,15 @@ class BaseDetailAJAX(BaseCrud):
 
     def get(self,request,model,*args,**kwargs):
         self.model = model
+
+        validation_login_required,response = self.validate_login_required()
+        if validation_login_required:
+            return response
+        
+        validation_permissions,response = self.validate_permissions()
+        if validation_permissions:
+            return response
+        
         instance = get_object(self.model,self.kwargs['pk'])        
         if instance is not None:
             self.data = serialize(
@@ -129,12 +155,21 @@ class BaseDetailAJAX(BaseCrud):
             return HttpResponse(self.data, content_type="application/json")
         return not_found_message(self.model)
 
-class BaseUpdateAJAX(View):
+class BaseUpdateAJAX(BaseCrud):
     model = None
     form_class = None
 
     def post(self,request,model,form = None,*args,**kwargs):
         self.model = model        
+
+        validation_login_required,response = self.validate_login_required()
+        if validation_login_required:
+            return response
+        
+        validation_permissions,response = self.validate_permissions()
+        if validation_permissions:
+            return response
+        
         self.form_class = get_form(form,self.model)        
         instance = get_object(self.model,self.kwargs['pk'])        
         if instance is not None:
@@ -146,22 +181,40 @@ class BaseUpdateAJAX(View):
                 return error_update_message(self.model,form)
         return not_found_message(self.model)
 
-class BaseDirectDeleteAJAX(View):
+class BaseDirectDeleteAJAX(BaseCrud):
     model = None
 
     def delete(self,request,model,*args,**kwargs):
         self.model = model
+
+        validation_login_required,response = self.validate_login_required()
+        if validation_login_required:
+            return response
+        
+        validation_permissions,response = self.validate_permissions()
+        if validation_permissions:
+            return response
+
         instance = get_object(self.model,self.kwargs['pk'])        
         if instance is not None:
             instance.delete()
             return success_delete_message(self.model)
         return not_found_message(self.model)
 
-class BaseLogicDeleteAJAX(View):
+class BaseLogicDeleteAJAX(BaseCrud):
     model = None
 
     def delete(self,request,model,*args,**kwargs):
         self.model = model
+
+        validation_login_required,response = self.validate_login_required()
+        if validation_login_required:
+            return response
+        
+        validation_permissions,response = self.validate_permissions()
+        if validation_permissions:
+            return response
+
         instance = get_object(self.model,self.kwargs['pk'])        
         if instance is not None:
             self.model.objects.filter(id = self.kwargs['pk']).update(model_state = False)

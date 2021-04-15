@@ -9,7 +9,11 @@ class Category(BaseModel):
     name = models.CharField('Nombre de Categoría', max_length=150)
     exclude_fields = ['date_created','date_modified','date_deleted']
     exclude_model = False
-    server_side = True
+    server_side = False
+    login_required = False
+    model_permissions = True
+    default_permissions = True
+
 
     class Meta:
         """Meta definition for Category."""
