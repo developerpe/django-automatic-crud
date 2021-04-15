@@ -90,8 +90,10 @@ class BaseModel(models.Model):
                                     __list_template_name: str,
                                     __create_template_name: str) -> URLList:
         
-        __model = get_model(self._meta.app_label,self._meta.object_name)
-
+        __app_name = self._meta.app_label
+        __model_name = self._meta.object_name
+        __model = get_model(__app_name,__model_name)
+        
         urlpatterns = [
             path(
                 "{0}/{1}".format(__app_name,self.get_list_url()),

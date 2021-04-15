@@ -92,10 +92,12 @@ class BaseListAJAX(BaseCrud):
 
         self.model = model
 
+        # login required validation
         validation_login_required,response = self.validate_login_required()
         if validation_login_required:
             return response
         
+        # permission required validation
         validation_permissions,response = self.validate_permissions()
         if validation_permissions:
             return response
@@ -116,10 +118,12 @@ class BaseCreateAJAX(BaseCrud):
     def post(self,request,model,form = None,*args,**kwargs):
         self.model = model
 
+        # login required validation
         validation_login_required,response = self.validate_login_required()
         if validation_login_required:
             return response
         
+        # permission required validation
         validation_permissions,response = self.validate_permissions()
         if validation_permissions:
             return response
@@ -136,10 +140,12 @@ class BaseDetailAJAX(BaseCrud):
     def get(self,request,model,*args,**kwargs):
         self.model = model
 
+        # login required validation
         validation_login_required,response = self.validate_login_required()
         if validation_login_required:
             return response
         
+        # permission required validation
         validation_permissions,response = self.validate_permissions()
         if validation_permissions:
             return response
@@ -162,14 +168,16 @@ class BaseUpdateAJAX(BaseCrud):
     def post(self,request,model,form = None,*args,**kwargs):
         self.model = model        
 
+        # login required validation
         validation_login_required,response = self.validate_login_required()
         if validation_login_required:
             return response
         
+        # permission required validation
         validation_permissions,response = self.validate_permissions()
         if validation_permissions:
             return response
-        
+     
         self.form_class = get_form(form,self.model)        
         instance = get_object(self.model,self.kwargs['pk'])        
         if instance is not None:
@@ -187,10 +195,12 @@ class BaseDirectDeleteAJAX(BaseCrud):
     def delete(self,request,model,*args,**kwargs):
         self.model = model
 
+        # login required validation
         validation_login_required,response = self.validate_login_required()
         if validation_login_required:
             return response
         
+        # permission required validation
         validation_permissions,response = self.validate_permissions()
         if validation_permissions:
             return response
@@ -207,10 +217,12 @@ class BaseLogicDeleteAJAX(BaseCrud):
     def delete(self,request,model,*args,**kwargs):
         self.model = model
 
+        # login required validation
         validation_login_required,response = self.validate_login_required()
         if validation_login_required:
             return response
         
+        # permission required validation
         validation_permissions,response = self.validate_permissions()
         if validation_permissions:
             return response

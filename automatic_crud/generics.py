@@ -48,15 +48,23 @@ class BaseCrudMixin(AccessMixin):
             self.permission_required = self.model.permission_required
 
     def validate_permissions(self,*args, **kwargs):
+        """
+        Validate permissions required if model_permissions = True
+        """
+
         if self.model.model_permissions:
             self.set_permissions()
-            if not self.has_permission():
+            if not self.has_permission() and not self.request.user.is_superuser:
                 response = JSR({'error': 'No tiene los permisos para realizar esta acción.'})
                 response.status_code = 403
                 return True,response
         return False,None
 
     def validate_login_required(self, *args, **kwargs):
+        """
+        Validate login required if login_required = True
+        """
+        
         if self.model.login_required:            
             if not self.request.user.is_authenticated:
                 response = JSR({'error': 'No ha iniciado sesión.'})
