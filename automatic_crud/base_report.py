@@ -12,6 +12,7 @@ try:
 except ImportError:
     from openpyxl.utils import get_column_letter
 
+from automatic_crud.generics import BaseCrudMixin
 from automatic_crud.utils import (
     get_model,get_model_fields_names,get_queryset
 )
@@ -69,6 +70,9 @@ class ExcelReportFormat:
         self.__report_title = _excel_report_title(self.__model_name)
         self.__workbook = Workbook()
         self.__sheetwork = self.__workbook.active
+
+    def get_model(self):
+        return self.__model
 
     def __excel_report_header(self,row_dimension = 15, col_dimension = 25):
         """
@@ -159,12 +163,25 @@ class ExcelReportFormat:
         self.__excel_report_header()
         self.__print_values()
 
-class GetExcelReport(TemplateView):
+class GetExcelReport(BaseCrudMixin,TemplateView):
     """
     Return Instance Excel Report for a model.
     """
 
     def get(self,request,_app_name:str,_model_name:str,*args,**kwargs):
         __report = ExcelReportFormat(_app_name,_model_name)
+
+        self.model = __report.get_model()
+
+        # login required validation
+        validation_login_required,response = self.validate_login_required()
+        if validation_login_required:
+            return response
+        
+        # permission required validation
+        validation_permissions,response = self.validate_permissions()
+        if validation_permissions:
+            return response
+
         __report.build_report()
         return __report.get_excel_report()

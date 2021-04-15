@@ -8,7 +8,7 @@ from django.views.generic import View
 class BaseCrudMixin(AccessMixin):
     model = None
     data = None
-    permission_required = []
+    permission_required = ()
 
     def get_permission_required(self):
         """
@@ -65,7 +65,7 @@ class BaseCrudMixin(AccessMixin):
         Validate login required if login_required = True
         """
         
-        if self.model.login_required:            
+        if self.model.login_required:          
             if not self.request.user.is_authenticated:
                 response = JSR({'error': 'No ha iniciado sesión.'})
                 response.status_code = 403
