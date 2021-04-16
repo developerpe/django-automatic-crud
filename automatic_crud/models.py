@@ -1,5 +1,5 @@
 from django.db import models
-from django.urls import path
+from django.urls import path,reverse_lazy
 from django.contrib.auth.decorators import login_required
 
 from automatic_crud.utils import get_model
@@ -18,6 +18,9 @@ class BaseModel(models.Model):
     date_modified = models.DateTimeField('Fecha de Modificación', auto_now=True, auto_now_add=False)
     date_deleted = models.DateTimeField('Fecha de Eliminación', auto_now=True, auto_now_add=False)  
     
+    all_cruds_types = True
+    normal_cruds = False
+    ajax_crud = False
     server_side = False
     exclude_model = False
     login_required = False
@@ -33,6 +36,11 @@ class BaseModel(models.Model):
     error_create_message = "no se ha podido registrar!"
     error_update_message = "no se ha podido actualizar!"
     non_found_message = "No se ha encontrado un registro con estos datos!"
+
+    create_template = None
+    update_template = None
+    list_template = None
+    detail_template = None
 
     class Meta:
         """Meta definition for BaseModel."""
@@ -85,66 +93,65 @@ class BaseModel(models.Model):
     def get_alias_excel_report_url(self):
         return "{0}-{1}-excel-report".format(self._meta.app_label,self._meta.object_name.lower())
 
-    def build_generics_urls_crud(self,__list_url : str,       
-                                    __form: DjangoForm,                                                                 
-                                    __list_template_name: str,
-                                    __create_template_name: str) -> URLList:
+    def build_generics_urls_crud(self, __form = None) -> URLList:
         
         __app_name = self._meta.app_label
         __model_name = self._meta.object_name
         __model = get_model(__app_name,__model_name)
-        
+
         urlpatterns = [
             path(
                 "{0}/{1}".format(__app_name,self.get_list_url()),
-                login_required(BaseList.as_view(
-                    template_name = __list_template_name,model = __model
-                )),
+                BaseList.as_view(
+                    template_name = __model.list_template,
+                    model = __model
+                ),
                 name = self.get_alias_list_url()
             ),
             path(
                 "{0}/{1}".format(__app_name,self.get_create_url()),
-                login_required(BaseCreate.as_view(
-                    template_name = __list_template_name,model = __model,
-                    form_class = __form,success_url = reverse_lazy("{0}:{1}".format(__app_name,__list_url))
-                )),
+                BaseCreate.as_view(
+                    template_name = __model.create_template,model = __model,
+                    form_class = __form,success_url = reverse_lazy("{0}:{1}".format(__app_name,self.get_alias_list_url()))
+                ),
                 name = self.get_alias_create_url()
             ),
             path(
                 "{0}/{1}".format(__app_name,self.get_detail_url()),
-                login_required(BaseDetail.as_view(model = __model)),
+                BaseDetail.as_view(model = __model),
                 name = self.get_alias_detail_url()
             ),
             path(
                 "{0}/{1}".format(__app_name,self.get_update_url()),
-                login_required(BaseUpdate.as_view(
-                    template_name = __create_template_name,model = __model,
-                    form_class = __form,success_url = reverse_lazy("{0}:{1}".format(__app_name,__list_url))
-                )),
+                BaseUpdate.as_view(
+                    template_name = __model.update_template,model = __model,
+                    form_class = __form,success_url = reverse_lazy("{0}:{1}".format(__app_name,self.get_alias_list_url()))
+                ),
                 name = self.get_alias_update_url()
             ),
             path(
                 "{0}/{1}".format(__app_name,self.get_logic_delete_url()),
-                login_required(BaseLogicDelete.as_view(
+                BaseLogicDelete.as_view(
                     model = __model,
-                    success_url = reverse_lazy("{0}:{1}".format(__app_name,__list_url))
-                )),
+                    success_url = reverse_lazy("{0}:{1}".format(__app_name,self.get_alias_list_url()))
+                ),
                 name = self.get_alias_logic_delete_url()
             ),
             path(
                 "{0}/{1}".format(__app_name,self.get_direct_delete_url()),
-                login_required(BaseDirectDelete.as_view(
+                BaseDirectDelete.as_view(
                     model = __model,
-                    success_url = reverse_lazy("{0}:{1}".format(__app_name,__list_url))
-                )),
+                    success_url = reverse_lazy("{0}:{1}".format(__app_name,self.get_alias_list_url()))
+                ),
                 name = self.get_alias_direct_delete_url()
             ),
             path(
                 "{0}/{1}".format(__app_name,self.get_excel_report_url()),
-                login_required(GetExcelReport.as_view()),{'__app_name':__app_name,'__model_name':__model_name},
+                GetExcelReport.as_view(),{'__app_name':__app_name,'__model_name':__model_name},
                 name = self.get_alias_excel_report_url()
             ),
         ]
+
         return urlpatterns
 
     def build_generics_urls_ajax_crud(self, __form = None) -> URLList:

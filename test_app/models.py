@@ -13,6 +13,8 @@ class Category(BaseModel):
     login_required = False
     model_permissions = True
     default_permissions = True
+    all_cruds_types = False
+    ajax_crud = True
 
 
     class Meta:
