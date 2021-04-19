@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if object_list %}
+        <table border="2">
+            <thead>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+            </thead>
+            <tbody>
+                {% for category in object_list %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.model_state }}</td>
+                        <td><button type="button">Editar</button></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h1>No existen categorías registradas.</h1>
+    {% endif %}
+</body>
+</html>

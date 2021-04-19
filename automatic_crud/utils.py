@@ -36,3 +36,18 @@ def get_form(form: DjangoForm,model: Instance) -> DjangoForm:
         return models.modelform_factory(model = model,form = form)
     else:
         return models.modelform_factory(model = model,exclude = ('model_state',))
+
+def build_template_name(template_name: str,model: Instance,action:str) -> str:
+    """
+    Build template name with app label from model, model name and action(list,create,update,detail)
+
+    """
+
+
+    if template_name == None:
+        template_name = '{0}/{1}_{2}.html'.format(
+                                        model._meta.app_label,
+                                        model._meta.object_name.lower(),
+                                        action
+                                    )
+    return template_name

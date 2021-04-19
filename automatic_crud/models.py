@@ -112,7 +112,7 @@ class BaseModel(models.Model):
                 "{0}/{1}".format(__app_name,self.get_create_url()),
                 BaseCreate.as_view(
                     template_name = __model.create_template,model = __model,
-                    form_class = __form,success_url = reverse_lazy("{0}:{1}".format(__app_name,self.get_alias_list_url()))
+                    form_class = __form,success_url = reverse_lazy("{0}".format(self.get_alias_list_url()))
                 ),
                 name = self.get_alias_create_url()
             ),
@@ -125,7 +125,7 @@ class BaseModel(models.Model):
                 "{0}/{1}".format(__app_name,self.get_update_url()),
                 BaseUpdate.as_view(
                     template_name = __model.update_template,model = __model,
-                    form_class = __form,success_url = reverse_lazy("{0}:{1}".format(__app_name,self.get_alias_list_url()))
+                    form_class = __form,success_url = reverse_lazy("{1}".format(__app_name,self.get_alias_list_url()))
                 ),
                 name = self.get_alias_update_url()
             ),
