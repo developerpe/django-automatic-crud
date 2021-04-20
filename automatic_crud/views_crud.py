@@ -66,8 +66,7 @@ class BaseCreate(BaseCrudMixin,CreateView):
         
         if form.is_valid():
             form.save()
-            url = self.success_url
-            return redirect(url)
+            return redirect(self.success_url)
         else:
             form = self.form_class()
             context = {
@@ -140,8 +139,7 @@ class BaseUpdate(BaseCrudMixin,UpdateView):
                 form = self.form_class(request.POST,request.FILES, instance = instance)   
             if form.is_valid():
                 form.save()
-                url = self.success_url
-                return redirect(url)
+                return redirect(self.success_url)
             else:
                 form = self.form_class()
                 context = {
@@ -149,7 +147,7 @@ class BaseUpdate(BaseCrudMixin,UpdateView):
                 }
                 return render(request,self.template_name, context)
         else:
-            return redirect(url)
+            return redirect(self.success_url)
 
 class BaseDirectDelete(BaseCrudMixin,DeleteView):
     def dispatch(self, request, *args, **kwargs):

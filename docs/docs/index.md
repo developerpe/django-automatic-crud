@@ -25,7 +25,7 @@ Django Automatic CRUD es un proyecto que genera CRUDS automáticos para cada mod
 
 ## Pre-Requisitos
 
-- Django >= 2
+- Django >= 2.2
 - Python >= 3.3
 
 ## Instalación Rápida

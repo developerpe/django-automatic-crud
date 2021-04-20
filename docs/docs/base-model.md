@@ -51,7 +51,9 @@ Y los siguientes atributos:
     list_template = None
     detail_template = None
 
-- **all_cruds_types** - si su valor es `True` generará CRUDS de tipo: Normales y AJAX, en `False` \_no generará ningún CRUD.
+## Atributos de modelos que hereden de BaseModel
+
+- **all_cruds_types** - si su valor es `True` generará CRUDS de tipo: Normales y AJAX, en `False` no generará ningún CRUD.
 - **normal_cruds** - si _all_cruds_types_ es `True`, el valor de este campo no será tomado en cuenta, si _all_cruds_types_ es `False` y este campo es `True`, generará CRUDS de tipo `Normal`.
 - **ajax_crud** - si _all_cruds_types_ es `True`, el valor de este campo no será tomado en cuenta, si _all_cruds_types_ es `False` y este campo es `True`, generará CRUDS de tipo `AJAX`.
 - **server_side** - si su valor es `True` se realizará la paginación del lado del servidor, esto es válido sólo para _CRUDS de tipo AJAX_, retornará la siguiente estructura:
@@ -84,4 +86,4 @@ Y los siguientes atributos:
 
 **NOTA**
 
-El nombre solicitado de forma automática por los templates para  CRUDS Normales son generados por una función llamada build_template_name, puedes encontrar información en [build_template_name](extra-functions.md)
+El nombre solicitado de forma automática por los templates para  CRUDS Normales son generados por una función llamada build_template_name, puedes encontrar información en [build_template_name](extra-functions.md#build_template_name)

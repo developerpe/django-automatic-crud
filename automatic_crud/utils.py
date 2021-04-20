@@ -10,7 +10,7 @@ def get_model(__app_name:str,__model_name:str) -> Instance:
     return apps.get_model(app_label = __app_name,model_name = __model_name)
 
 def get_object(model: Instance,pk: int):
-    # return the record for a pk sent
+    # return the record for a pk sended
     instance = model.objects.filter(id = pk,model_state = True).first()
     if instance:
         return instance

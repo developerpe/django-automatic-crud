@@ -2,30 +2,30 @@
 
 Django Automatic CRUD es un proyecto que genera CRUDS automáticos para cada modelo que tenga la herencia indicada mas adelante. Estos CRUDS y URLS pueden ser de 2 tipos: **Normales y AJAX**.
 
-##Nota
+## Nota
 
-**CRUDS Normales: ** Estos CRUDS son accesibles utilizando el Sistema de Plantillas de Django e incluyen validaciones de errores, existencia de templates, inicio de sesión y permisos.
+**CRUDS Normales ** - Estos CRUDS son accesibles utilizando el Sistema de Plantillas de Django e incluyen validaciones de errores, existencia de templates, inicio de sesión y permisos.
 
-**CRUDS AJAX: ** Estos CURDS son accesibles utilizando JavaScript o cualquier herramienta que permita realizar una petición a una URL indicada.
+**CRUDS AJAX ** - Estos CURDS son accesibles utilizando JavaScript o cualquier herramienta que permita realizar una petición a una URL indicada.
 
 ## Características
 
-* CRUDS automáticos con sólo crear los modelos.
-* URLS generadas automáticamente para cada tipo de CRUD de modelo.
-* Ruta para generación automática de un Reporte en formato Excel.
-* Validación de Inicio de Sesión.
-* Validación de Permisos.
-* CRUDS automáticos independientes, es decir, pueden generarse de los 2 tipos, sólo de uno o independiente.
-* Campos a excluir para listado, registro, edición y detalle de modelo de forma dinámica.
-* Mensajes de error automáticos y customizables.
-* Nombre de templates para CRUDS customizables.
-* Form de Django para CRUDS dinámico.
-* Server-side.
-* Paginación de datos.
+- CRUDS automáticos con sólo crear los modelos.
+- URLS generadas automáticamente para cada tipo de CRUD de modelo.
+- Ruta para generación automática de un Reporte en formato Excel.
+- Validación de Inicio de Sesión.
+- Validación de Permisos.
+- CRUDS automáticos independientes, es decir, pueden generarse de los 2 tipos, sólo de uno o independiente.
+- Campos a excluir para listado, registro, edición y detalle de modelo de forma dinámica.
+- Mensajes de error automáticos y customizables.
+- Nombre de templates para CRUDS customizables.
+- Form de Django para CRUDS dinámico.
+- Server-side.
+- Paginación de datos.
 
 ## Pre-Requisitos
 
-- Django >= 2
+- Django >= 2.2
 - Python >= 3.3
 
 ## Instalación Rápida
@@ -38,6 +38,7 @@ Django Automatic CRUD es un proyecto que genera CRUDS automáticos para cada mod
 ```
 
 - Agrega automatic_crud a tu INSTALLED_APPS:
+
 ```
     INSTALLED_APPS = [
         ...
