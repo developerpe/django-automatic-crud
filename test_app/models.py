@@ -14,8 +14,11 @@ class Category(BaseModel):
     login_required = False
     model_permissions = False
     default_permissions = True
-    all_cruds_types = True
-    ajax_crud = True
+    all_cruds_types = False
+    normal_cruds = True
+    ajax_crud = False
+
+    list_template = None
 
 
     class Meta:

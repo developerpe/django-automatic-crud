@@ -1,0 +1,15 @@
+site_name: Documentación de Django Automatic CRUD
+
+nav:
+  - Inicio: 'index.md'
+  - Acerca de: 'about.md'
+  - 'Guía de Usuario':
+    - 'BaseModel': 'base-model.md'
+    - 'Reporte en Excel': 'excel-report.md'
+    - 'Tipos de Datos': 'data-types.md'
+    - 'CRUDS Normales': 'normal-cruds.md'
+    - 'CRUDS AJAX': 'ajax-cruds.md'
+    - 'Registro de Modelos': 'register-models.md'
+    - 'Funciones Extras': 'extra-functions.md'
+
+theme: readthedocs
