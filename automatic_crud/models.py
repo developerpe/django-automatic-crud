@@ -27,7 +27,7 @@ class BaseModel(models.Model):
     permission_required = ()
     model_permissions = False
     default_permissions = False
-    exclude_fields = ['date_created','date_modified','date_deleted','state']
+    exclude_fields = ['date_created','date_modified','date_deleted','model_state']
 
     success_create_message = "registrado correctamente!"
     success_update_message = "actualizado correctamente!"

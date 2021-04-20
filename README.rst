@@ -1,111 +1,108 @@
-=====
-Automatic Django Crud (CRUDS Automáticos en Django) para versiones de Django 2.2
-=====
+# Django Automatic CRUD (CRUD Automáticos con Django)
 
-Automatic Django Crud ( CRUDS Automáticos en Django) es un proyecto que genera
-URLS Automáticas y CRUDS Automáticos para cada modelo registrado, además tiene
-la gestión de Usuarios modificada de manera general para su creación, edición,
-listado y eliminación.
+Django Automatic CRUD es un proyecto que genera CRUDS automáticos para cada modelo que tenga la herencia indicada mas adelante. Estos CRUDS y URLS pueden ser de 2 tipos: **Normales y AJAX**.
 
-Los CRUDS son accesibles vía peticiones AJAX por ser generales y pensados en convertirse
-en API. Además genera una URL para generar un reporte en Excel. Cabe resaltar que la
-lógica aquí creada para los CRUDS es la básica, si se desea modificar la lógica
-correspondiente se puede realizar sobreescribiendo los métodos get y post correspondientes
-ubicados en las siguientes clases:
+##Nota
 
-    BaseCrear,BaseListar,BaseActualizar,BaseEliminarLogico
+**CRUDS Normales: ** Estos CRUDS son accesibles utilizando el Sistema de Plantillas de Django e incluyen validaciones de errores, existencia de templates, inicio de sesión y permisos.
 
-Las cuales se puede importar de:
-    from aplicaciones.base.base_crud.views_crud import BaseCrear,BaseListar,BaseActualizar,BaseEliminarLogico
+**CRUDS AJAX: ** Estos CURDS son accesibles utilizando JavaScript o cualquier herramienta que permita realizar una petición a una URL indicada.
 
-Para redefinirlas se haría de la siguiente forma:
+## Características
 
-    class NuevaBaseCrear(BaseCrear):
+* CRUDS automáticos con sólo crear los modelos.
+* URLS generadas automáticamente para cada tipo de CRUD de modelo.
+* Ruta para generación automática de un Reporte en formato Excel.
+* Validación de Inicio de Sesión.
+* Validación de Permisos.
+* CRUDS automáticos independientes, es decir, pueden generarse de los 2 tipos, sólo de uno o independiente.
+* Campos a excluir para listado, registro, edición y detalle de modelo de forma dinámica.
+* Mensajes de error automáticos y customizables.
+* Nombre de templates para CRUDS customizables.
+* Form de Django para CRUDS dinámico.
+* Server-side.
+* Paginación de datos.
 
-        def post(self,request,*args,**kwargs):
-            pass
+## Pre-Requisitos
 
-Inicio
------------
+- Django >= 2
+- Python >= 3.3
 
-1. Clona o descarga este repositorio
-2. Copia las carpetas aplicaciones, static y templates y el archivo requirements.txt a tu proyecto.
-3. Añade "aplicaciones.base" y "aplicaciones.usuarios" a tu INSTALLED_APPS de esta manera:
+## Instalación Rápida
 
+- Crea un entorno virtual e inicialo.
+- Ejecuta el siguiente comando desde tu consola:
+
+```
+    pip install django-automatic-crud
+```
+
+- Agrega automatic_crud a tu INSTALLED_APPS:
+```
     INSTALLED_APPS = [
         ...
-        'aplicaciones.base',
-        'aplicaciones.usuarios',
+        'automatic_crud',
+        ...
     ]
+```
 
-4. Incluye las URLconf de aplicaciones.usuarios y aplicaciones.base al archivo urls.py de tu proyecto:
+## Generación de CRUDS
 
-    path('usuarios/', include(('aplicaciones.usuarios.urls','usuarios'))),
-    path('base/', include(('aplicaciones.base.urls','base'))),
+- Para cada modelo que desees generar los CRUDS, deben heredar de BaseModel, por ejemplo:
 
-5. aplicaciones.base incluye las vistas necesarias para un Login y Logout, por ello su inclusión en el archivo urls.py.
+```python
 
-6. Añade AUTH_USER_MODEL = 'usuarios.Usuario' a tu archivo settings de tu proyecto.
+    from automatic_crud.models import BaseModel
 
-7. Ejecuta el comando pip install -r requirements.txt
+    class NewModel(BaseModel):
+        ...
 
-8. Ejecuta el comando python manage.py makemigrations para crear las migraciones iniciales incluidas las del Usuario personalizado.
+```
 
-Creación de CRUDS
------------
+- Agrega la siguiente linea en tu archivo urls.py global:
 
-1. Crea una aplicación nueva dentro de la carpeta aplicaciones, la cuál contendrá los modelos de tu proyecto.
+```python
+    path('automatic-crud/',include('automatic_crud.urls'))
+```
 
-2. En tu archivo models.py importa:
+- Ahora, ingresa a tu navegador y escribe una ruta que no exista para que Django pueda mostrarte todas las rutas existentes, te mostrará 14 rutas para cada modelo que herede de BaseModel, las cuales estarán dentro de la estructura de ruta: `http://localhost:8000/automatic-crud/` y tendrán el siguiente patrón:
 
-    from aplicaciones.base.models import ModeloBase
+```python
 
-  y haz que todos tus modelos hereden de este import, de la siguiente manera:
+    automatic_crud/ app_name/ model_name / list / [name="app_name-model_name-list"]
+    automatic_crud/ app_name/ model_name / create / [name="app_name-model_name-create"]
+    automatic_crud/ app_name/ model_name / detail / <int:pk>/ [name="app_name-model_name-detail"]
+    automatic_crud/ app_name/ model_name / update / <int:pk>/ [name="app_name-model_name-update"]
+    automatic_crud/ app_name/ model_name / logic-delete / <int:pk>/ [name="app_name-model_name-logic-delete"]
+    automatic_crud/ app_name/ model_name / direct-delete / <int:pk>/ [name="app_name-model_name-direct-delete"]
+    automatic_crud/ app_name/ model_name / excel-report / [name="app_name-model_name-excel-report"]
 
-    Ejemplo:
+    automatic_crud/ ajax-app_name/ model_name / list / [name="app_name-model_name-list-ajax"]
+    automatic_crud/ ajax-app_name/ model_name / create / [name="app_name-model_name-create-ajax"]
+    automatic_crud/ ajax-app_name/ model_name / detail / <int:pk>/ [name="app_name-model_name-detail-ajax"]
+    automatic_crud/ ajax-app_name/ model_name / update / <int:pk>/ [name="app_name-model_name-update-ajax"]
+    automatic_crud/ ajax-app_name/ model_name / logic-delete / <int:pk>/ [name="app_name-model_name-logic-delete-ajax"]
+    automatic_crud/ ajax-app_name/ model_name / direct-delete / <int:pk>/ [name="app_name-model_name-direct-delete-ajax"]
+    automatic_crud/ ajax-app_name/ model_name / excel-report / [name="app_name-model_name-excel-report-ajax"]
 
-    class Persona(ModeloBase):
-        nombre = models.CharField(verbose_name = 'Nombre de Persona', max_length = 100)
-        apellidos = models.CharField(verbose_name = 'Apellidos de Persona', max_length = 200)
+```
 
-        def __str__(self):
-            return '{0},{1}'.format(self.apellidos,self.nombre)
+---
 
-3. Ahora crea un archivo urls.py dentro de tu nueva aplicación y coloca lo siguiente:
+Si quieres apoyar realizando una donación, puedes hacerla a este enlace:
 
-    from django.urls import path
-    from .models import Persona
+- [Donación al Proyecto](https://www.paypal.com/paypalme/oliversando)
 
-    urlpatterns = [
+## Redes Sociales
 
-    ]
+[Web](http://www.developerpe.com)
 
-    urlpatterns += Persona().construir_URLS_genericas_de_CRUD('aplicacion_nueva','Persona')
+[Facebook](https://www.facebook.com/developerper​)
 
-  Los parámetros enviados a la función construir_URLS_genericas_de_CRUD son: Una cadena de texto con el nombre de la aplicación
-  donde se encuentra el modelo y el segundo parámetro es una cadena de texto con el nombre del modelo.
+[Instagram](https://www.instagram.com/developer.pe/​)
 
-4. Enlazalo las URLconf de tu nueva aplicación con con las urls de tu proyecto:
+[Twitter](https://twitter.com/Developerpepiur​)
 
-    path('aplicacion_nueva/',include(('aplicaciones.aplicacion_nueva.urls','aplicacion_nueva'))),
+[Youtube](Developer.pe)
 
-5. Ejecuta el comando python manage.py makemigrations
-
-6. Ejecuta el comando python manage.py migrate
-
-7. Inicia tu servidor con el comando python manage.py runserver
-
-8. Accede a una ruta que no exista, por ejemplo: localhost:8000/aplicacion_nueva/ y le aparecerán todas las rutas generadas para
-   el modelo indicado:
-
-    aplicacion_nueva/ persona/ [name='aplicacion_nueva_persona_listar']
-
-    aplicacion_nueva/ persona/<int:pk>/ [name='aplicacion_nueva_persona_absolute']
-
-    aplicacion_nueva/ persona/crear/ [name='aplicacion_nueva_persona_crear']
-
-    aplicacion_nueva/ persona/<int:pk>/actualizar/ [name='aplicacion_nueva_persona_actualizar']
-
-    aplicacion_nueva/ persona/<int:pk>/eliminar/ [name='aplicacion_nueva_persona_eliminar']
-
-    aplicacion_nueva/ persona/reporte_excel/ [name='aplicacion_nueva_persona_reporte_excel']
+**Correo: developerpeperu@gmail.com**
