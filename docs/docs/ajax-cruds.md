@@ -120,6 +120,28 @@ Al registrar correctamente la instancia o haber problemas al registrarla, retorn
 
 Los errores retornados son por campo y por defecto retornará los que Django haya reconocido automáticamente de los modelos, si desea utilizar errores personalizados deberá utilizar un Form de Django personalizado, el cual debe indicarlo en el modelo.
 
+**FORM PERSONALIZADO**
+
+Si se desea utilizar un Form de Django personalizado para el registro o edición de un modelo deberá sobreescribir los siguientes métodos en su modelo:
+
+```python
+EJEMPLO
+
+# form para crear
+def get_create_form(self,form = None):
+    from test_app.forms import CategoryForm
+    self.create_form = CategoryForm
+    return self.create_form 
+
+# form para actualizar
+def get_update_form(self,form = None):
+    from test_app.forms import CategoryForm
+    self.update_form = CategoryForm
+    return self.update_form
+```
+
+Siempre deberá importar el form personalizado **dentro de la función**, nunca fuera de ella, esto para evitar un error conocido como `Importación Circular`.
+
 ## BaseDetailAJAX
 
 ```python
@@ -176,6 +198,28 @@ Al actualizar correctamente la instancia o haber problemas al actualizar, retorn
         }
 
 Los errores retornados son por campo y por defecto retornará los que Django haya reconocido automáticamente de los modelos, si desea utilizar errores personalizados deberá utilizar un Form de Django personalizado, el cual debe indicarlo en el modelo.
+
+**FORM PERSONALIZADO**
+
+Si se desea utilizar un Form de Django personalizado para el registro o edición de un modelo deberá sobreescribir los siguientes métodos en su modelo:
+
+```python
+EJEMPLO
+
+# form para crear
+def get_create_form(self,form = None):
+    from test_app.forms import CategoryForm
+    self.create_form = CategoryForm
+    return self.create_form 
+
+# form para actualizar
+def get_update_form(self,form = None):
+    from test_app.forms import CategoryForm
+    self.update_form = CategoryForm
+    return self.update_form
+```
+
+Siempre deberá importar el form personalizado **dentro de la función**, nunca fuera de ella, esto para evitar un error conocido como `Importación Circular`.
 
 ## BaseDirectDeleteAJAX
 

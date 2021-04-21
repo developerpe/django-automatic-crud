@@ -2,12 +2,14 @@ from django.db import models
 
 from automatic_crud.models import BaseModel
 
+
+
 class Category(BaseModel):
     """Model definition for Category."""
 
     # TODO: Define fields here
-    name = models.CharField('Nombre de Categoría', max_length=150)
-    
+    name = models.CharField('Nombre de Categoría', max_length=150)    
+
     exclude_fields = ['date_created','date_modified','date_deleted']
     exclude_model = False
     server_side = True
@@ -20,6 +22,15 @@ class Category(BaseModel):
 
     list_template = None
 
+    def get_create_form(self,form = None):
+        from test_app.forms import CategoryForm
+        self.create_form = CategoryForm
+        return self.create_form        
+
+    def get_update_form(self,form = None):
+        from test_app.forms import CategoryForm
+        self.update_form = CategoryForm
+        return self.update_form
 
     class Meta:
         """Meta definition for Category."""

@@ -28,6 +28,28 @@ Recibe herencia de BaseCrudMixin, la cuál se encarga de realizar las validacion
 
 Retorna el form de Django para el modelo al template bajo el nombre de `form`.
 
+**FORM PERSONALIZADO**
+
+Si se desea utilizar un Form de Django personalizado para el registro o edición de un modelo deberá sobreescribir los siguientes métodos en su modelo:
+
+```python
+EJEMPLO
+
+# form para crear
+def get_create_form(self,form = None):
+    from test_app.forms import CategoryForm
+    self.create_form = CategoryForm
+    return self.create_form 
+
+# form para actualizar
+def get_update_form(self,form = None):
+    from test_app.forms import CategoryForm
+    self.update_form = CategoryForm
+    return self.update_form
+```
+
+Siempre deberá importar el form personalizado **dentro de la función**, nunca fuera de ella, esto para evitar un error conocido como `Importación Circular`.
+
 ## BaseDetail
 
 ```python
@@ -57,6 +79,28 @@ Recibe herencia de BaseCrudMixin, la cuál se encarga de realizar las validacion
 Retorna el form de Django para el modelo al template bajo el nombre de `form`.
 
 Retorna la instancia del modelo al template bajo el nombre de `object`.
+
+**FORM PERSONALIZADO**
+
+Si se desea utilizar un Form de Django personalizado para el registro o edición de un modelo deberá sobreescribir los siguientes métodos en su modelo:
+
+```python
+EJEMPLO
+
+# form para crear
+def get_create_form(self,form = None):
+    from test_app.forms import CategoryForm
+    self.create_form = CategoryForm
+    return self.create_form 
+
+# form para actualizar
+def get_update_form(self,form = None):
+    from test_app.forms import CategoryForm
+    self.update_form = CategoryForm
+    return self.update_form
+```
+
+Siempre deberá importar el form personalizado **dentro de la función**, nunca fuera de ella, esto para evitar un error conocido como `Importación Circular`.
 
 ## BaseDirectDelete
 

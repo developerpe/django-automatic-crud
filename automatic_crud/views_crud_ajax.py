@@ -128,7 +128,7 @@ class BaseCreateAJAX(BaseCrud):
         if validation_permissions:
             return response
         
-        self.form_class = get_form(form,self.model)        
+        self.form_class = get_form(form,self.model)
         form = self.form_class(request.POST,request.FILES)        
         if form.is_valid():
             form.save()

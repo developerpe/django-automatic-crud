@@ -18,15 +18,19 @@ class BaseModel(models.Model):
     date_modified = models.DateTimeField('Fecha de Modificación', auto_now=True, auto_now_add=False)
     date_deleted = models.DateTimeField('Fecha de Eliminación', auto_now=True, auto_now_add=False)  
     
-    all_cruds_types = True
-    normal_cruds = False
+    form = None
+    all_cruds_types = True    
     ajax_crud = False
+    normal_cruds = False
+    
     server_side = False
     exclude_model = False
+    
     login_required = False
     permission_required = ()
     model_permissions = False
     default_permissions = False
+    
     exclude_fields = ['date_created','date_modified','date_deleted','model_state']
 
     success_create_message = "registrado correctamente!"
@@ -45,6 +49,16 @@ class BaseModel(models.Model):
     class Meta:
         """Meta definition for BaseModel."""
         abstract = True
+
+    def get_create_form(self,form = None):
+        if form != None:
+            self.create_form = form
+        return self.create_form
+
+    def get_update_form(self,form = None):
+        if form != None:
+            self.update_form = form
+        return self.update_form
 
     def build_message(self,message:str,custom_message = False):
         if custom_message:
@@ -93,11 +107,13 @@ class BaseModel(models.Model):
     def get_alias_excel_report_url(self):
         return "{0}-{1}-excel-report".format(self._meta.app_label,self._meta.object_name.lower())
 
-    def build_generics_urls_crud(self, __form = None) -> URLList:
+    def build_generics_urls_crud(self) -> URLList:
         
         __app_name = self._meta.app_label
         __model_name = self._meta.object_name
         __model = get_model(__app_name,__model_name)
+        __create_form = self.get_create_form()
+        __update_form = self.get_update_form()
 
         urlpatterns = [
             path(
@@ -112,7 +128,7 @@ class BaseModel(models.Model):
                 "{0}/{1}".format(__app_name,self.get_create_url()),
                 BaseCreate.as_view(
                     template_name = __model.create_template,model = __model,
-                    form_class = __form,success_url = reverse_lazy("{0}".format(self.get_alias_list_url()))
+                    form_class = __create_form,success_url = reverse_lazy("{0}".format(self.get_alias_list_url()))
                 ),
                 name = self.get_alias_create_url()
             ),
@@ -125,7 +141,7 @@ class BaseModel(models.Model):
                 "{0}/{1}".format(__app_name,self.get_update_url()),
                 BaseUpdate.as_view(
                     template_name = __model.update_template,model = __model,
-                    form_class = __form,success_url = reverse_lazy("{1}".format(__app_name,self.get_alias_list_url()))
+                    form_class = __update_form,success_url = reverse_lazy("{1}".format(__app_name,self.get_alias_list_url()))
                 ),
                 name = self.get_alias_update_url()
             ),
@@ -154,16 +170,20 @@ class BaseModel(models.Model):
 
         return urlpatterns
 
-    def build_generics_urls_ajax_crud(self, __form = None) -> URLList:
+    def build_generics_urls_ajax_crud(self) -> URLList:
         __app_name = self._meta.app_label
         __model_name = self._meta.object_name
         __model = get_model(__app_name,__model_name)
         __model_context = {
             'model':__model
         }
-        __model_form_context = {
+        __model_create_form_context = {
             'model':__model,
-            'form':__form
+            'form':self.get_create_form()
+        }
+        __model_update_form_context = {
+            'model':__model,
+            'form':self.get_update_form()
         }
 
         urlpatterns = [
@@ -174,7 +194,7 @@ class BaseModel(models.Model):
             ),
             path(
                 "ajax-{0}/{1}".format(__app_name,self.get_create_url()),
-                BaseCreateAJAX.as_view(),__model_form_context,
+                BaseCreateAJAX.as_view(),__model_create_form_context,
                 name = "{0}-ajax".format(self.get_alias_create_url())
             ),
             path(
@@ -184,7 +204,7 @@ class BaseModel(models.Model):
             ),
             path(
                 "ajax-{0}/{1}".format(__app_name,self.get_update_url()),
-                BaseUpdateAJAX.as_view(),__model_form_context,
+                BaseUpdateAJAX.as_view(),__model_update_form_context,
                 name = "{0}-ajax".format(self.get_alias_update_url())
             ),
             path(
