@@ -10,12 +10,12 @@ class Category(BaseModel):
     
     exclude_fields = ['date_created','date_modified','date_deleted']
     exclude_model = False
-    server_side = False
+    server_side = True
     login_required = False
     model_permissions = False
     default_permissions = True
-    all_cruds_types = False
-    normal_cruds = True
+    all_cruds_types = True
+    normal_cruds = False
     ajax_crud = False
 
     list_template = None
