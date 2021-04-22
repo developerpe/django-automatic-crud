@@ -144,5 +144,4 @@ Atributos de modelos que hereden de BaseModel
 
 El nombre solicitado de forma automática por los templates para CRUDS
 Normales son generados por una función llamada build\_template\_name,
-puedes encontrar información en
-`build\_template\_name <extra-functions.md#build_template_name>`__
+puedes encontrar información en el apartado de **Funciones Extra - build_template_name**

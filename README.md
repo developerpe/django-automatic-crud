@@ -2,6 +2,10 @@
 
 Django Automatic CRUD es un proyecto que genera CRUDS automáticos para cada modelo que tenga la herencia indicada mas adelante. Estos CRUDS y URLS pueden ser de 2 tipos: **Normales y AJAX**.
 
+## Documentación
+
+Para una documentación mas detallada visitar: [Documentación Django Automatic CRUD](https://django-automatic-crud.readthedocs.io/es/latest/index.html)
+
 ## Nota
 
 **CRUDS Normales ** - Estos CRUDS son accesibles utilizando el Sistema de Plantillas de Django e incluyen validaciones de errores, existencia de templates, inicio de sesión y permisos.
