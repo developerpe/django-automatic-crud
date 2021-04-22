@@ -1,10 +1,8 @@
 import os
 from setuptools import setup
 
-os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
-
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__),fname)).read()
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 
 
 setup(
@@ -14,7 +12,8 @@ setup(
     include_package_data=True,
     license='BSD License',
     description='CRUDS Automáticos con Django',
-    long_description=read('README.rst'),
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url='https://github.com/developerpe/django-automatic-crud',
     author='Oliver Sandoval',
     author_email='developerpeperu@gmail.com',
