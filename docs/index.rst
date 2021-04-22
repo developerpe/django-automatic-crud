@@ -1,3 +1,6 @@
+Django Automatic CRUD (CRUD Automáticos con Django)
+===================================================
+
 .. toctree::
    :caption: Introduccion
 

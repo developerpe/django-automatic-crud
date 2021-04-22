@@ -26,7 +26,7 @@ herencia, todo modelo obtendrá los siguientes campos:
     date_modified = models.DateTimeField('Fecha de Modificación', auto_now=True, auto_now_add=False)
     date_deleted = models.DateTimeField('Fecha de Eliminación', auto_now=True, auto_now_add=False)
 
-    model\ *state* es usado dentro de Django Automatic CRUD para la
+   model_state es usado dentro de Django Automatic CRUD para la
     eliminación lógica.
 
 Y los siguientes atributos:

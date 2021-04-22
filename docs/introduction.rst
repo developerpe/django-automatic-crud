@@ -19,38 +19,38 @@ indicada.
 Características
 ---------------
 
--  CRUDS automáticos con sólo crear los modelos.
--  URLS generadas automáticamente para cada tipo de CRUD de modelo.
--  Ruta para generación automática de un Reporte en formato Excel.
--  Validación de Inicio de Sesión.
--  Validación de Permisos.
--  CRUDS automáticos independientes, es decir, pueden generarse de los 2
-   tipos, sólo de uno o independiente.
--  Campos a excluir para listado, registro, edición y detalle de modelo
+- CRUDS automáticos con sólo crear los modelos.
+- URLS generadas automáticamente para cada tipo de CRUD de modelo.
+- Ruta para generación automática de un Reporte en formato Excel.
+- Validación de Inicio de Sesión.
+- Validación de Permisos.
+- CRUDS automáticos independientes, es decir, pueden generarse de los 2
+    tipos, sólo de uno o independiente.
+- Campos a excluir para listado, registro, edición y detalle de modelo
    de forma dinámica.
--  Mensajes de error automáticos y customizables.
--  Nombre de templates para CRUDS customizables.
--  Form de Django para CRUDS dinámico.
--  Server-side.
--  Paginación de datos.
+- Mensajes de error automáticos y customizables.
+- Nombre de templates para CRUDS customizables.
+- Form de Django para CRUDS dinámico.
+- Server-side.
+- Paginación de datos.
 
 Pre-Requisitos
 --------------
 
--  Django >= 2.2
--  Python >= 3.3
+- Django >= 2.2
+- Python >= 3.3
 
 Instalación Rápida
 ------------------
 
--  Crea un entorno virtual e inicialo.
--  Ejecuta el siguiente comando desde tu consola:
+- Crea un entorno virtual e inicialo.
+- Ejecuta el siguiente comando desde tu consola:
 
 ::
 
         pip install django-automatic-crud
 
--  Agrega automatic\_crud a tu INSTALLED\_APPS:
+- Agrega automatic\_crud a tu INSTALLED\_APPS:
 
    ::
 
@@ -63,7 +63,7 @@ Instalación Rápida
 Generación de CRUDS
 -------------------
 
--  Para cada modelo que desees generar los CRUDS, deben heredar de
+- Para cada modelo que desees generar los CRUDS, deben heredar de
    BaseModel, por ejemplo:
 
 .. code:: python
@@ -74,13 +74,13 @@ Generación de CRUDS
         class NewModel(BaseModel):
             ...
 
--  Agrega la siguiente linea en tu archivo urls.py global:
+- Agrega la siguiente linea en tu archivo urls.py global:
 
 .. code:: python
 
         path('automatic-crud/',include('automatic_crud.urls'))
 
--  Ahora, ingresa a tu navegador y escribe una ruta que no exista para
+- Ahora, ingresa a tu navegador y escribe una ruta que no exista para
    que Django pueda mostrarte todas las rutas existentes, te mostrará 14
    rutas para cada modelo que herede de BaseModel, las cuales estarán
    dentro de la estructura de ruta:
