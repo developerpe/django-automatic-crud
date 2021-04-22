@@ -9,11 +9,12 @@ def read(fname):
 
 setup(
     name='django-automatic-crud',
-    version='1.0.5',
+    version='1.0.6',
     packages=['automatic_crud'],
     include_package_data=True,
     license='BSD License',
     description='CRUDS Automáticos con Django',
+    long_description=read('README.rst'),
     url='https://github.com/developerpe/django-automatic-crud',
     author='Oliver Sandoval',
     author_email='developerpeperu@gmail.com',

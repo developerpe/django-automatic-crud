@@ -4,6 +4,7 @@ from django.views.generic import (
     CreateView,DeleteView,UpdateView,DetailView,
     ListView,View
 )
+from django.core.paginator import Paginator
 
 from automatic_crud.generics import BaseCrudMixin
 from automatic_crud.utils import get_object,get_form,build_template_name
@@ -28,7 +29,14 @@ class BaseList(BaseCrudMixin,ListView):
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object_list'] = self.get_queryset()
+        data = self.get_queryset()
+        
+        if self.model.normal_pagination:
+            paginator = Paginator(data,self.model.values_for_page)
+            page_number = self.request.GET('page')
+            data = paginator.get_page(page_number)
+        
+        context['object_list'] = data
         return context
 
     def get(self,request,*args,**kwargs):

@@ -19,6 +19,10 @@ clase Genérica de Django, ListView.
 El listado de registros obtenidos para el modelo indicado serán
 retornados al template bajo el nombre de ``object_list``
 
+Si se coloca el parámetro ``normal_pagination`` en ``True`` se aplicará la paginación normal de Django,
+por defecto mostrará 10 elementos por página, sin embargo, esto se puede modificar con el
+atributo ``values_for_page``
+
 BaseCreate
 ----------
 

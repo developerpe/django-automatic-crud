@@ -26,6 +26,8 @@ class BaseModel(models.Model):
     
     server_side = False
     exclude_model = False
+    normal_pagination = False
+    values_for_page = 10
     
     login_required = False
     permission_required = ()
