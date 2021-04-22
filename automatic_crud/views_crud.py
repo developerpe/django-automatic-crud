@@ -132,6 +132,9 @@ class BaseUpdate(BaseCrudMixin,UpdateView):
         form = form(instance = get_object(self.model,self.kwargs['pk']))
         
         context = self.get_context_data()
+        if context['object'] == None:
+            return redirect(self.success_url)        
+        
         context['form'] = form
         return render(request,self.template_name,context)
 
@@ -172,7 +175,6 @@ class BaseDirectDelete(BaseCrudMixin,DeleteView):
         return super().dispatch(request, *args, **kwargs)    
 
 class BaseLogicDelete(BaseCrudMixin,DeleteView):
-    model = None
 
     def dispatch(self, request, *args, **kwargs):
         # login required validation
@@ -187,12 +189,11 @@ class BaseLogicDelete(BaseCrudMixin,DeleteView):
 
         return super().dispatch(request, *args, **kwargs)
 
-    def delete(self,request,model,*args,**kwargs):
-        self.model = model
+    def delete(self,request,*args,**kwargs):
         instance = get_object(self.model,self.kwargs['pk'])
         
         if instance is not None:
-            instance.update(model_state = False)
+            self.model.objects.filter(id = self.kwargs['pk']).update(model_state = False)
             return redirect(self.success_url)        
         else:
             return redirect(self.success_url)
