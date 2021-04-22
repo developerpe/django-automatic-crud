@@ -144,7 +144,7 @@ class BaseModel(models.Model):
                 "{0}/{1}".format(__app_name,self.get_update_url()),
                 BaseUpdate.as_view(
                     template_name = __model.update_template,model = __model,
-                    form_class = __update_form,success_url = reverse_lazy("{1}".format(__app_name,self.get_alias_list_url()))
+                    form_class = __update_form,success_url = reverse_lazy("{0}".format(self.get_alias_list_url()))
                 ),
                 name = self.get_alias_update_url()
             ),
@@ -152,7 +152,7 @@ class BaseModel(models.Model):
                 "{0}/{1}".format(__app_name,self.get_logic_delete_url()),
                 BaseLogicDelete.as_view(
                     model = __model,
-                    success_url = reverse_lazy("{0}:{1}".format(__app_name,self.get_alias_list_url()))
+                    success_url = reverse_lazy("{0}".format(self.get_alias_list_url()))
                 ),
                 name = self.get_alias_logic_delete_url()
             ),
@@ -160,7 +160,7 @@ class BaseModel(models.Model):
                 "{0}/{1}".format(__app_name,self.get_direct_delete_url()),
                 BaseDirectDelete.as_view(
                     model = __model,
-                    success_url = reverse_lazy("{0}:{1}".format(__app_name,self.get_alias_list_url()))
+                    success_url = reverse_lazy("{0}".format(self.get_alias_list_url()))
                 ),
                 name = self.get_alias_direct_delete_url()
             ),

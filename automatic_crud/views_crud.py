@@ -187,12 +187,12 @@ class BaseLogicDelete(BaseCrudMixin,DeleteView):
 
         return super().dispatch(request, *args, **kwargs)
 
-    def delete(self,request,model,url,*args,**kwargs):
+    def delete(self,request,model,*args,**kwargs):
         self.model = model
         instance = get_object(self.model,self.kwargs['pk'])
         
         if instance is not None:
             instance.update(model_state = False)
-            return redirect(url)        
+            return redirect(self.success_url)        
         else:
-            return redirect(url)
+            return redirect(self.success_url)
