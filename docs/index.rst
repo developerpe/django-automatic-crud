@@ -1,108 +1,129 @@
-# Django Automatic CRUD (CRUD Automáticos con Django)
+Django Automatic CRUD (CRUD Automáticos con Django)
+===================================================
 
-Django Automatic CRUD es un proyecto que genera CRUDS automáticos para cada modelo que tenga la herencia indicada mas adelante. Estos CRUDS y URLS pueden ser de 2 tipos: **Normales y AJAX**.
+Django Automatic CRUD es un proyecto que genera CRUDS automáticos para
+cada modelo que tenga la herencia indicada mas adelante. Estos CRUDS y
+URLS pueden ser de 2 tipos: **Normales y AJAX**.
 
-## Nota
+Nota
+----
 
-**CRUDS Normales: ** Estos CRUDS son accesibles utilizando el Sistema de Plantillas de Django e incluyen validaciones de errores, existencia de templates, inicio de sesión y permisos.
+**CRUDS Normales: ** Estos CRUDS son accesibles utilizando el Sistema de
+Plantillas de Django e incluyen validaciones de errores, existencia de
+templates, inicio de sesión y permisos.
 
-**CRUDS AJAX: ** Estos CURDS son accesibles utilizando JavaScript o cualquier herramienta que permita realizar una petición a una URL indicada.
+**CRUDS AJAX: ** Estos CURDS son accesibles utilizando JavaScript o
+cualquier herramienta que permita realizar una petición a una URL
+indicada.
 
-## Características
+Características
+---------------
 
-* CRUDS automáticos con sólo crear los modelos.
-* URLS generadas automáticamente para cada tipo de CRUD de modelo.
-* Ruta para generación automática de un Reporte en formato Excel.
-* Validación de Inicio de Sesión.
-* Validación de Permisos.
-* CRUDS automáticos independientes, es decir, pueden generarse de los 2 tipos, sólo de uno o independiente.
-* Campos a excluir para listado, registro, edición y detalle de modelo de forma dinámica.
-* Mensajes de error automáticos y customizables.
-* Nombre de templates para CRUDS customizables.
-* Form de Django para CRUDS dinámico.
-* Server-side.
-* Paginación de datos.
+-  CRUDS automáticos con sólo crear los modelos.
+-  URLS generadas automáticamente para cada tipo de CRUD de modelo.
+-  Ruta para generación automática de un Reporte en formato Excel.
+-  Validación de Inicio de Sesión.
+-  Validación de Permisos.
+-  CRUDS automáticos independientes, es decir, pueden generarse de los 2
+   tipos, sólo de uno o independiente.
+-  Campos a excluir para listado, registro, edición y detalle de modelo
+   de forma dinámica.
+-  Mensajes de error automáticos y customizables.
+-  Nombre de templates para CRUDS customizables.
+-  Form de Django para CRUDS dinámico.
+-  Server-side.
+-  Paginación de datos.
 
-## Pre-Requisitos
+Pre-Requisitos
+--------------
 
-- Django >= 2.2
-- Python >= 3.3
+-  Django >= 2.2
+-  Python >= 3.3
 
-## Instalación Rápida
+Instalación Rápida
+------------------
 
-- Crea un entorno virtual e inicialo.
-- Ejecuta el siguiente comando desde tu consola:
+-  Crea un entorno virtual e inicialo.
+-  Ejecuta el siguiente comando desde tu consola:
 
-```
-    pip install django-automatic-crud
-```
+::
 
-- Agrega automatic_crud a tu INSTALLED_APPS:
-```
-    INSTALLED_APPS = [
-        ...
-        'automatic_crud',
-        ...
-    ]
-```
+        pip install django-automatic-crud
 
-## Generación de CRUDS
+-  Agrega automatic\_crud a tu INSTALLED\_APPS:
 
-- Para cada modelo que desees generar los CRUDS, deben heredar de BaseModel, por ejemplo:
+   ::
 
-```python
+           INSTALLED_APPS = [
+               ...
+               'automatic_crud',
+               ...
+           ]
 
-    from automatic_crud.models import BaseModel
+Generación de CRUDS
+-------------------
 
-    class NewModel(BaseModel):
-        ...
+-  Para cada modelo que desees generar los CRUDS, deben heredar de
+   BaseModel, por ejemplo:
 
-```
+.. code:: python
 
-- Agrega la siguiente linea en tu archivo urls.py global:
 
-```python
-    path('automatic-crud/',include('automatic_crud.urls'))
-```
+        from automatic_crud.models import BaseModel
 
-- Ahora, ingresa a tu navegador y escribe una ruta que no exista para que Django pueda mostrarte todas las rutas existentes, te mostrará 14 rutas para cada modelo que herede de BaseModel, las cuales estarán dentro de la estructura de ruta: `http://localhost:8000/automatic-crud/` y tendrán el siguiente patrón:
+        class NewModel(BaseModel):
+            ...
 
-```python
+-  Agrega la siguiente linea en tu archivo urls.py global:
 
-    automatic_crud/ app_name/ model_name / list / [name="app_name-model_name-list"]
-    automatic_crud/ app_name/ model_name / create / [name="app_name-model_name-create"]
-    automatic_crud/ app_name/ model_name / detail / <int:pk>/ [name="app_name-model_name-detail"]
-    automatic_crud/ app_name/ model_name / update / <int:pk>/ [name="app_name-model_name-update"]
-    automatic_crud/ app_name/ model_name / logic-delete / <int:pk>/ [name="app_name-model_name-logic-delete"]
-    automatic_crud/ app_name/ model_name / direct-delete / <int:pk>/ [name="app_name-model_name-direct-delete"]
-    automatic_crud/ app_name/ model_name / excel-report / [name="app_name-model_name-excel-report"]
+.. code:: python
 
-    automatic_crud/ ajax-app_name/ model_name / list / [name="app_name-model_name-list-ajax"]
-    automatic_crud/ ajax-app_name/ model_name / create / [name="app_name-model_name-create-ajax"]
-    automatic_crud/ ajax-app_name/ model_name / detail / <int:pk>/ [name="app_name-model_name-detail-ajax"]
-    automatic_crud/ ajax-app_name/ model_name / update / <int:pk>/ [name="app_name-model_name-update-ajax"]
-    automatic_crud/ ajax-app_name/ model_name / logic-delete / <int:pk>/ [name="app_name-model_name-logic-delete-ajax"]
-    automatic_crud/ ajax-app_name/ model_name / direct-delete / <int:pk>/ [name="app_name-model_name-direct-delete-ajax"]
-    automatic_crud/ ajax-app_name/ model_name / excel-report / [name="app_name-model_name-excel-report-ajax"]
+        path('automatic-crud/',include('automatic_crud.urls'))
 
-```
+-  Ahora, ingresa a tu navegador y escribe una ruta que no exista para
+   que Django pueda mostrarte todas las rutas existentes, te mostrará 14
+   rutas para cada modelo que herede de BaseModel, las cuales estarán
+   dentro de la estructura de ruta:
+   ``http://localhost:8000/automatic-crud/`` y tendrán el siguiente
+   patrón:
 
----
+.. code:: python
+
+
+        automatic_crud/ app_name/ model_name / list / [name="app_name-model_name-list"]
+        automatic_crud/ app_name/ model_name / create / [name="app_name-model_name-create"]
+        automatic_crud/ app_name/ model_name / detail / <int:pk>/ [name="app_name-model_name-detail"]
+        automatic_crud/ app_name/ model_name / update / <int:pk>/ [name="app_name-model_name-update"]
+        automatic_crud/ app_name/ model_name / logic-delete / <int:pk>/ [name="app_name-model_name-logic-delete"]
+        automatic_crud/ app_name/ model_name / direct-delete / <int:pk>/ [name="app_name-model_name-direct-delete"]
+        automatic_crud/ app_name/ model_name / excel-report / [name="app_name-model_name-excel-report"]
+
+        automatic_crud/ ajax-app_name/ model_name / list / [name="app_name-model_name-list-ajax"]
+        automatic_crud/ ajax-app_name/ model_name / create / [name="app_name-model_name-create-ajax"]
+        automatic_crud/ ajax-app_name/ model_name / detail / <int:pk>/ [name="app_name-model_name-detail-ajax"]
+        automatic_crud/ ajax-app_name/ model_name / update / <int:pk>/ [name="app_name-model_name-update-ajax"]
+        automatic_crud/ ajax-app_name/ model_name / logic-delete / <int:pk>/ [name="app_name-model_name-logic-delete-ajax"]
+        automatic_crud/ ajax-app_name/ model_name / direct-delete / <int:pk>/ [name="app_name-model_name-direct-delete-ajax"]
+        automatic_crud/ ajax-app_name/ model_name / excel-report / [name="app_name-model_name-excel-report-ajax"]
+
+--------------
 
 Si quieres apoyar realizando una donación, puedes hacerla a este enlace:
 
-- [Donación al Proyecto](https://www.paypal.com/paypalme/oliversando)
+-  `Donación al
+   Proyecto <https://www.paypal.com/paypalme/oliversando>`__
 
-## Redes Sociales
+Redes Sociales
+--------------
 
-[Web](http://www.developerpe.com)
+`Web <http://www.developerpe.com>`__
 
-[Facebook](https://www.facebook.com/developerper​)
+`Facebook <https://www.facebook.com/developerper​>`__
 
-[Instagram](https://www.instagram.com/developer.pe/​)
+`Instagram <https://www.instagram.com/developer.pe/​>`__
 
-[Twitter](https://twitter.com/Developerpepiur​)
+`Twitter <https://twitter.com/Developerpepiur​>`__
 
-[Youtube](Developer.pe)
+`Youtube <Developer.pe>`__
 
 **Correo: developerpeperu@gmail.com**
