@@ -13,12 +13,13 @@ def register_models():
     models = apps.get_models()
     
     for model in models:
+
         if isinstance(model(),BaseModel):
             try:
                 if model.__name__ not in exclude_models:
                     
                     if not model.exclude_model:
-                        
+
                         if model.all_cruds_types:
                             urlpatterns += model().build_generics_urls_crud()
                             urlpatterns += model().build_generics_urls_ajax_crud()
@@ -28,7 +29,9 @@ def register_models():
                             if model.ajax_crud:         
                                 urlpatterns += model().build_generics_urls_ajax_crud()
                             if model.normal_cruds:
-                                urlpatterns += model().build_generics_urls_crud()
+                                urlpatterns += model().build_generics_urls_crud()                            
+
             except:
                 pass
+
     return urlpatterns

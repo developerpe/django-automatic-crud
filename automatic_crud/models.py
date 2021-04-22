@@ -18,7 +18,8 @@ class BaseModel(models.Model):
     date_modified = models.DateTimeField('Fecha de Modificación', auto_now=True, auto_now_add=False)
     date_deleted = models.DateTimeField('Fecha de Eliminación', auto_now=True, auto_now_add=False)  
     
-    form = None
+    create_form = None
+    update_form = None
     all_cruds_types = True    
     ajax_crud = False
     normal_cruds = False
