@@ -22,7 +22,8 @@ migrations/
 
 # C extensions
 *.so
-
+build/
+dist/
 # Distribution / packaging
 .Python
 develop-eggs/
