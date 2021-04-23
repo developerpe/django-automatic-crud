@@ -13,7 +13,7 @@ from automatic_crud.response_messages import *
 class BaseListAJAX(BaseCrud):
 
     def get_queryset(self):
-        return self.model.objects.filter(model_state = True)
+        return self.model.objects.filter(model_state = True).select_related().prefetch_related()
 
     def get_server_side_queryset(self):
         """
@@ -22,8 +22,9 @@ class BaseListAJAX(BaseCrud):
 
         """
 
-        return self.model.objects.filter(model_state = True).values().order_by(
-                                                f"{self.request.GET.get('order_by','id')}")
+        return self.model.objects.filter(
+                model_state = True
+            ).select_related().prefetch_related().order_by(f"{self.request.GET.get('order_by','id')}")
 
     def server_side(self):
         """
@@ -51,10 +52,17 @@ class BaseListAJAX(BaseCrud):
 
         object_list = []
         
-        for index,instance in enumerate(self.get_server_side_queryset()[start:start+end],start):
-            for exclude_field in self.model.exclude_fields:
-                del instance[f'{exclude_field}']
-            
+        temp_response = JSR({'data':self.data})
+        temp_data = temp_response.content.decode("UTF-8")
+        temp_data = ast.literal_eval(temp_data)
+        temp_data = json.loads(temp_data['data'])
+        
+        for index,instance in enumerate(temp_data[start:start+end],start):
+            del instance['model']
+            for field in instance['fields']:
+                if field in self.model.exclude_fields:
+                    del instance['fields'][f'{exclude_field}']
+
             instance['index'] = index + 1
             object_list.append(instance)   
         
@@ -103,6 +111,9 @@ class BaseListAJAX(BaseCrud):
             return response
 
         if self.model.server_side:
+            self.data = serialize('json',self.get_server_side_queryset(),
+                        fields = self.get_fields_for_model(),
+                        use_natural_foreign_keys = True)
             self.server_side()
         else:            
             self.data = serialize('json',self.get_queryset(),
