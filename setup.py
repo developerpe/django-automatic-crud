@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='django-automatic-crud',
-    version='1.1.3',
+    version='1.1.8',
     packages=['automatic_crud'],
     include_package_data=True,
     license='BSD License',

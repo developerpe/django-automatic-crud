@@ -166,7 +166,7 @@ class BaseModel(models.Model):
             ),
             path(
                 "{0}/{1}".format(__app_name,self.get_excel_report_url()),
-                GetExcelReport.as_view(),{'__app_name':__app_name,'__model_name':__model_name},
+                GetExcelReport.as_view(),{'_app_name':__app_name,'_model_name':__model_name},
                 name = self.get_alias_excel_report_url()
             ),
         ]

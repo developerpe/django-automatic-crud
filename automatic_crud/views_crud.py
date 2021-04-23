@@ -33,7 +33,7 @@ class BaseList(BaseCrudMixin,ListView):
         
         if self.model.normal_pagination:
             paginator = Paginator(data,self.model.values_for_page)
-            page_number = self.request.GET('page')
+            page_number = self.request.GET.get('page','1')
             data = paginator.get_page(page_number)
         
         context['object_list'] = data

@@ -96,14 +96,15 @@ class ExcelReportFormat:
 
         __count = 1
         for __field in self.__model_fields_names:
-            __letter = get_column_letter(__count).upper()
-            self.__sheetwork['{0}3'.format(__letter)].alignment = Alignment(horizontal = "center", vertical = "center")
-            self.__sheetwork['{0}3'.format(__letter)].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
-                                                top = Side(border_style = "thin"), bottom = Side(border_style = "thin"))
-            self.__sheetwork['{0}3'.format(__letter)].font = Font(name = 'Calibri', size = 9, bold = True)
-            self.__sheetwork['{0}3'.format(__letter)] = '{0}'.format(__field.upper())
-            self.__sheetwork.column_dimensions['{0}'.format(__letter)].height = col_dimension
-            __count += 1
+            if __field not in self.__model.exclude_fields:
+                __letter = get_column_letter(__count).upper()
+                self.__sheetwork['{0}3'.format(__letter)].alignment = Alignment(horizontal = "center", vertical = "center")
+                self.__sheetwork['{0}3'.format(__letter)].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+                                                    top = Side(border_style = "thin"), bottom = Side(border_style = "thin"))
+                self.__sheetwork['{0}3'.format(__letter)].font = Font(name = 'Calibri', size = 9, bold = True)
+                self.__sheetwork['{0}3'.format(__letter)] = '{0}'.format(__field.upper())
+                self.__sheetwork.column_dimensions['{0}'.format(__letter)].height = col_dimension
+                __count += 1
     
     def __print_values(self):
         """

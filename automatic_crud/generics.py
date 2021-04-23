@@ -39,10 +39,10 @@ class BaseCrudMixin(AccessMixin):
         """
 
         if self.model.default_permissions:
-            __default_permissions = ('add_{0}'.format(self.model.__name__.lower()),
-                                    'view_{0}'.format(self.model.__name__.lower()),
-                                    'delete_{0}'.format(self.model.__name__.lower()),
-                                    'change_{0}'.format(self.model.__name__.lower()))
+            __default_permissions = ('{0}.add_{1}'.format(self.model._meta.app_label,self.model.__name__.lower()),
+                                    '{0}.view_{1}'.format(self.model._meta.app_label,self.model.__name__.lower()),
+                                    '{0}.delete_{1}'.format(self.model._meta.app_label,self.model.__name__.lower()),
+                                    '{0}.change_{1}'.format(self.model._meta.app_label,self.model.__name__.lower()))
             self.permission_required = __default_permissions
         else:
             self.permission_required = self.model.permission_required
