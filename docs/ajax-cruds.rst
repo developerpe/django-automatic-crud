@@ -36,16 +36,20 @@ sea ``True`` con la siguiente estructura por página:
             "length": 6,
             "objects": [
                 {
-                    "id": 1,
-                    "model_state": true,
-                    "name": "abarrote",
+                    "pk": 1,
+                    "fields":{
+                        "name": "abarrote",
+                        "modal_state": true,
+                    },
                     "index": 1
                 },
                 {
-                    "id": 4,
-                    "model_state": true,
-                    "name": "Utensilios2",
-                    "index": 2
+                    "pk": 1,
+                    "fields":{
+                        "name": "carro",
+                        "modal_state": true,
+                    },
+                    "index": 1
                 }
             ]
         }
@@ -196,8 +200,11 @@ Retorna la información del objeto en formato JSON.
     Ejemplo
 
         {
-            "model_state": true,
-            "name": "carro"
+            "pk": 1,
+            "fields": {
+                "model_state": true,
+                "name": "abarrote"
+            }
         }
 
 Los campos retornados son aquellos que no estén incluidos en el atributo

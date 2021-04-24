@@ -6,6 +6,10 @@ Django Automatic CRUD es un proyecto que genera CRUDS automáticos para cada mod
 
 Para una documentación mas detallada visitar: [Documentación Django Automatic CRUD](https://django-automatic-crud.readthedocs.io/es/latest/index.html)
 
+## Tutoriales
+
+Para ver los tutoriales realizados sobre Django Automatic CRUD visitar: [Developer.pe/Django Automatic CRUD](https://www.youtube.com/playlist?list=PLMbRqrU_kvbRUbcpiEB-ixW4e-DmXCUtV)
+
 ## Nota
 
 **CRUDS Normales ** - Estos CRUDS son accesibles utilizando el Sistema de Plantillas de Django e incluyen validaciones de errores, existencia de templates, inicio de sesión y permisos.

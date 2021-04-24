@@ -148,6 +148,23 @@ class BaseCreateAJAX(BaseCrud):
 
 class BaseDetailAJAX(BaseCrud):
 
+    data = None
+    
+    def normalize_data(self):
+        """
+        Generate an HttpResponse instance to get the serialized query and 
+        delete the ['model'] key from the dictionary and convert the dictionary 
+        to json and save on self.data
+
+        """
+        temp_response = JSR({'data':self.data})
+        temp_data = temp_response.content.decode("UTF-8")
+        temp_data = ast.literal_eval(temp_data)
+        temp_data = json.loads(temp_data['data'])
+        for item in temp_data:  
+            del item['model']
+            self.data = json.dumps(item)
+    
     def get(self,request,model,*args,**kwargs):
         self.model = model
 
@@ -161,21 +178,63 @@ class BaseDetailAJAX(BaseCrud):
         if validation_permissions:
             return response
         
-        instance = get_object(self.model,self.kwargs['pk'])        
+        self.data = get_object(self.model,self.kwargs['pk'])        
         if instance is not None:
             self.data = serialize(
-                            'json',[instance,],
+                            'json',[self.data,],
                             fields = self.get_fields_for_model(),
                             use_natural_foreign_keys = True,
                             use_natural_primary_keys = True
                         )
+            self.normalize_data()
             return HttpResponse(self.data, content_type="application/json")
         return not_found_message(self.model)
 
 class BaseUpdateAJAX(BaseCrud):
     model = None
     form_class = None
+    data = None
 
+    def normalize_data(self):
+        """
+        Generate an HttpResponse instance to get the serialized query and 
+        delete the ['model'] key from the dictionary and convert the dictionary 
+        to json and save on self.data
+
+        """
+        temp_response = JSR({'data':self.data})
+        temp_data = temp_response.content.decode("UTF-8")
+        temp_data = ast.literal_eval(temp_data)
+        temp_data = json.loads(temp_data['data'])
+        for item in temp_data:  
+            del item['model']
+            self.data = json.dumps(item)
+    
+    def get(self,request,model,*args,**kwargs):
+        self.model = model
+
+        # login required validation
+        validation_login_required,response = self.validate_login_required()
+        if validation_login_required:
+            return response
+        
+        # permission required validation
+        validation_permissions,response = self.validate_permissions()
+        if validation_permissions:
+            return response
+
+        self.data = get_object(self.model,self.kwargs['pk'])       
+        if self.data is not None:
+            self.data = serialize(
+                            'json',[self.data,],
+                            fields = self.get_fields_for_model(),
+                            use_natural_foreign_keys = True,
+                            use_natural_primary_keys = True
+                        )
+            self.normalize_data()
+            return HttpResponse(self.data, content_type="application/json")
+        return not_found_message(self.model)
+    
     def post(self,request,model,form = None,*args,**kwargs):
         self.model = model        
 
