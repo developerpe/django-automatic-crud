@@ -14,7 +14,7 @@ def register_models():
     
     for model in models:
 
-        if isinstance(model(),BaseModel):
+        if issubclass(model, BaseModel):
             try:
                 if model.__name__ not in exclude_models:
                     
