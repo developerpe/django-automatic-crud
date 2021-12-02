@@ -179,7 +179,7 @@ class BaseDetailAJAX(BaseCrud):
             return response
         
         self.data = get_object(self.model,self.kwargs['pk'])        
-        if instance is not None:
+        if self.data is not None:
             self.data = serialize(
                             'json',[self.data,],
                             fields = self.get_fields_for_model(),
