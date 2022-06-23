@@ -39,12 +39,7 @@ Para ver los tutoriales realizados sobre Django Automatic CRUD visitar: [Develop
 ## Instalación Rápida
 
 - Crea un entorno virtual e inicialo.
-- Ejecuta el siguiente comando desde tu consola:
-
-```
-    pip install django-automatic-crud
-```
-
+- Clona el repositorio en tu proyecto:
 - Agrega automatic_crud a tu INSTALLED_APPS:
 
 ```
