@@ -9,7 +9,7 @@ def register_models():
     """
 
     urlpatterns = []
-    exclude_models = ['ContentType','LogEntry','Session','Permission','Group']
+    exclude_models = ['ContentType', 'LogEntry', 'Session', 'Permission', 'Group']
     models = apps.get_models()
     
     for model in models:

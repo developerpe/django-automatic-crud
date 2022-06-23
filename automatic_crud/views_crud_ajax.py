@@ -1,10 +1,8 @@
 import json
 import ast
 
-from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse as JSR
 from django.core.serializers import serialize
-from django.views.generic import View
 
 from automatic_crud.generics import BaseCrud
 from automatic_crud.utils import get_object,get_form
@@ -13,7 +11,7 @@ from automatic_crud.response_messages import *
 class BaseListAJAX(BaseCrud):
 
     def get_queryset(self):
-        return self.model.objects.filter(model_state = True).select_related().prefetch_related()
+        return self.model.objects.filter(model_state=True).select_related().prefetch_related()
 
     def get_server_side_queryset(self):
         """
@@ -23,8 +21,8 @@ class BaseListAJAX(BaseCrud):
         """
 
         return self.model.objects.filter(
-                model_state = True
-            ).select_related().prefetch_related().order_by(f"{self.request.GET.get('order_by','id')}")
+            model_state=True
+        ).select_related().prefetch_related().order_by(f"{self.request.GET.get('order_by', 'id')}")
 
     def server_side(self):
         """
@@ -47,21 +45,20 @@ class BaseListAJAX(BaseCrud):
         """
 
 
-        start = int(self.request.GET.get('start','0'))
-        end = int(self.request.GET.get('end','10'))
+        start = int(self.request.GET.get('start', '0'))
+        end = int(self.request.GET.get('end', '10'))
 
         object_list = []
         
-        temp_response = JSR({'data':self.data})
+        temp_response = JSR({'data': self.data})
         temp_data = temp_response.content.decode("UTF-8")
         temp_data = ast.literal_eval(temp_data)
         temp_data = json.loads(temp_data['data'])
         
-        for index,instance in enumerate(temp_data[start:start+end],start):
+        for index, instance in enumerate(temp_data[start:start+end], start):
             del instance['model']
             for field in instance['fields']:
-                if field in self.model.exclude_fields:
-                    del instance['fields'][f'{exclude_field}']
+                if field in self.model.exclude_fields: del instance['fields'][f'{exclude_field}']
 
             instance['index'] = index + 1
             object_list.append(instance)   
@@ -80,12 +77,11 @@ class BaseListAJAX(BaseCrud):
 
         """
 
-        temp_response = JSR({'data':self.data})
+        temp_response = JSR({'data': self.data})
         temp_data = temp_response.content.decode("UTF-8")
         temp_data = ast.literal_eval(temp_data)
         temp_data = json.loads(temp_data['data'])
-        for item in temp_data:  
-            del item['model']
+        for item in temp_data: del item['model']
         self.data = json.dumps(temp_data)
 
     def get(self, request,model,*args,**kwargs):
@@ -101,24 +97,30 @@ class BaseListAJAX(BaseCrud):
         self.model = model
 
         # login required validation
-        validation_login_required,response = self.validate_login_required()
+        validation_login_required, response = self.validate_login_required()
         if validation_login_required:
             return response
         
         # permission required validation
-        validation_permissions,response = self.validate_permissions()
+        validation_permissions, response = self.validate_permissions()
         if validation_permissions:
             return response
 
         if self.model.server_side:
-            self.data = serialize('json',self.get_server_side_queryset(),
-                        fields = self.get_fields_for_model(),
-                        use_natural_foreign_keys = True)
+            self.data = serialize(
+                'json',
+                self.get_server_side_queryset(),
+                fields=self.get_fields_for_model(),
+                use_natural_foreign_keys=True
+            )
             self.server_side()
         else:            
-            self.data = serialize('json',self.get_queryset(),
-                                    fields = self.get_fields_for_model(),
-                                    use_natural_foreign_keys = True)
+            self.data = serialize(
+                'json',
+                self.get_queryset(),
+                fields=self.get_fields_for_model(),
+                use_natural_foreign_keys=True
+            )
             self.normalize_data()
         return HttpResponse(self.data, content_type="application/json")
 
@@ -126,25 +128,25 @@ class BaseCreateAJAX(BaseCrud):
     model = None
     form_class = None
 
-    def post(self,request,model,form = None,*args,**kwargs):
+    def post(self, request, model, form=None, *args, **kwargs):
         self.model = model
 
         # login required validation
-        validation_login_required,response = self.validate_login_required()
+        validation_login_required, response = self.validate_login_required()
         if validation_login_required:
             return response
         
         # permission required validation
-        validation_permissions,response = self.validate_permissions()
+        validation_permissions, response = self.validate_permissions()
         if validation_permissions:
             return response
         
-        self.form_class = get_form(form,self.model)
-        form = self.form_class(request.POST,request.FILES)        
+        self.form_class = get_form(form, self.model)
+        form = self.form_class(request.POST, request.FILES)        
         if form.is_valid():
             form.save()
             return success_create_message(self.model)
-        return error_create_message(self.model,form)
+        return error_create_message(self.model, form)
 
 class BaseDetailAJAX(BaseCrud):
 
@@ -157,7 +159,7 @@ class BaseDetailAJAX(BaseCrud):
         to json and save on self.data
 
         """
-        temp_response = JSR({'data':self.data})
+        temp_response = JSR({'data': self.data})
         temp_data = temp_response.content.decode("UTF-8")
         temp_data = ast.literal_eval(temp_data)
         temp_data = json.loads(temp_data['data'])
@@ -165,35 +167,36 @@ class BaseDetailAJAX(BaseCrud):
             del item['model']
             self.data = json.dumps(item)
     
-    def get(self,request,model,*args,**kwargs):
+    def get(self, request, model, *args, **kwargs):
         self.model = model
 
         # login required validation
-        validation_login_required,response = self.validate_login_required()
+        validation_login_required, response = self.validate_login_required()
         if validation_login_required:
             return response
         
         # permission required validation
-        validation_permissions,response = self.validate_permissions()
+        validation_permissions, response = self.validate_permissions()
         if validation_permissions:
             return response
         
         self.data = get_object(self.model,self.kwargs['pk'])        
         if self.data is not None:
             self.data = serialize(
-                            'json',[self.data,],
-                            fields = self.get_fields_for_model(),
-                            use_natural_foreign_keys = True,
-                            use_natural_primary_keys = True
-                        )
+                'json',
+                [self.data,],
+                fields=self.get_fields_for_model(),
+                use_natural_foreign_keys=True,
+                use_natural_primary_keys=True
+            )
             self.normalize_data()
             return HttpResponse(self.data, content_type="application/json")
         return not_found_message(self.model)
 
 class BaseUpdateAJAX(BaseCrud):
+    data = None
     model = None
     form_class = None
-    data = None
 
     def normalize_data(self):
         """
@@ -202,7 +205,7 @@ class BaseUpdateAJAX(BaseCrud):
         to json and save on self.data
 
         """
-        temp_response = JSR({'data':self.data})
+        temp_response = JSR({'data': self.data})
         temp_data = temp_response.content.decode("UTF-8")
         temp_data = ast.literal_eval(temp_data)
         temp_data = json.loads(temp_data['data'])
@@ -210,72 +213,73 @@ class BaseUpdateAJAX(BaseCrud):
             del item['model']
             self.data = json.dumps(item)
     
-    def get(self,request,model,*args,**kwargs):
+    def get(self, request, model, *args, **kwargs):
         self.model = model
 
         # login required validation
-        validation_login_required,response = self.validate_login_required()
+        validation_login_required, response = self.validate_login_required()
         if validation_login_required:
             return response
         
         # permission required validation
-        validation_permissions,response = self.validate_permissions()
+        validation_permissions, response = self.validate_permissions()
         if validation_permissions:
             return response
 
         self.data = get_object(self.model,self.kwargs['pk'])       
         if self.data is not None:
             self.data = serialize(
-                            'json',[self.data,],
-                            fields = self.get_fields_for_model(),
-                            use_natural_foreign_keys = True,
-                            use_natural_primary_keys = True
-                        )
+                'json',
+                [self.data,],
+                fields=self.get_fields_for_model(),
+                use_natural_foreign_keys=True,
+                use_natural_primary_keys=True
+            )
             self.normalize_data()
             return HttpResponse(self.data, content_type="application/json")
         return not_found_message(self.model)
     
-    def post(self,request,model,form = None,*args,**kwargs):
+    def post(self, request, model, form=None, *args, **kwargs):
         self.model = model        
 
         # login required validation
-        validation_login_required,response = self.validate_login_required()
+        validation_login_required, response = self.validate_login_required()
         if validation_login_required:
             return response
         
         # permission required validation
-        validation_permissions,response = self.validate_permissions()
+        validation_permissions, response = self.validate_permissions()
         if validation_permissions:
             return response
      
-        self.form_class = get_form(form,self.model)        
-        instance = get_object(self.model,self.kwargs['pk'])        
+        self.form_class = get_form(form, self.model)        
+        instance = get_object(self.model, self.kwargs['pk'])        
         if instance is not None:
-            form = self.form_class(request.POST,request.FILES,instance = instance)            
+            form = self.form_class(request.POST, request.FILES, instance=instance)            
             if form.is_valid():
                 form.save()
                 return success_update_message(self.model)        
             else:
-                return error_update_message(self.model,form)
+                return error_update_message(self.model, form)
         return not_found_message(self.model)
 
 class BaseDirectDeleteAJAX(BaseCrud):
     model = None
 
-    def delete(self,request,model,*args,**kwargs):
+    def delete(self, request, model, *args, **kwargs):
         self.model = model
 
         # login required validation
-        validation_login_required,response = self.validate_login_required()
+        validation_login_required, response = self.validate_login_required()
         if validation_login_required:
             return response
         
         # permission required validation
-        validation_permissions,response = self.validate_permissions()
+        validation_permissions, response = self.validate_permissions()
         if validation_permissions:
             return response
 
-        instance = get_object(self.model,self.kwargs['pk'])        
+        instance = get_object(self.model, self.kwargs['pk'])        
         if instance is not None:
             instance.delete()
             return success_delete_message(self.model)
@@ -288,17 +292,17 @@ class BaseLogicDeleteAJAX(BaseCrud):
         self.model = model
 
         # login required validation
-        validation_login_required,response = self.validate_login_required()
+        validation_login_required, response = self.validate_login_required()
         if validation_login_required:
             return response
         
         # permission required validation
-        validation_permissions,response = self.validate_permissions()
+        validation_permissions, response = self.validate_permissions()
         if validation_permissions:
             return response
 
-        instance = get_object(self.model,self.kwargs['pk'])        
+        instance = get_object(self.model, self.kwargs['pk'])        
         if instance is not None:
-            self.model.objects.filter(id = self.kwargs['pk']).update(model_state = False)
+            self.model.objects.filter(id=self.kwargs['pk']).update(model_state=False)
             return success_delete_message(self.model)
         return not_found_message(self.model)

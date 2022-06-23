@@ -1,8 +1,5 @@
 from django.http import JsonResponse as JSR
 from django.contrib.auth.mixins import AccessMixin
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
-
 from django.views.generic import View
 
 class BaseCrudMixin(AccessMixin):
@@ -21,7 +18,7 @@ class BaseCrudMixin(AccessMixin):
                 '{0}.get_permission_required().'.format(self.__class__.__name__)
             )
         if isinstance(self.permission_required, str):
-            perms = (self.permission_required,)
+            perms = (self.permission_required, )
         else:
             perms = self.permission_required
         return perms
@@ -57,8 +54,8 @@ class BaseCrudMixin(AccessMixin):
             if not self.has_permission() and not self.request.user.is_superuser:
                 response = JSR({'error': 'No tiene los permisos para realizar esta acción.'})
                 response.status_code = 403
-                return True,response
-        return False,None
+                return True, response
+        return False, None
 
     def validate_login_required(self, *args, **kwargs):
         """
@@ -69,11 +66,11 @@ class BaseCrudMixin(AccessMixin):
             if not self.request.user.is_authenticated:
                 response = JSR({'error': 'No ha iniciado sesión.'})
                 response.status_code = 403
-                return True,response
-        return False,None
+                return True, response
+        return False, None
 
 
-class BaseCrud(BaseCrudMixin,View):
+class BaseCrud(BaseCrudMixin, View):
 
     def get_fields_for_model(self):
         """
