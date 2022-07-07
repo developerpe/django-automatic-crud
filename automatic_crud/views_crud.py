@@ -34,7 +34,10 @@ class BaseList(BaseCrudMixin, ListView):
             paginator = Paginator(data, self.model.values_for_page)
             page_number = self.request.GET.get('page', '1')
             data = paginator.get_page(page_number)
-        
+
+        context['app'] = self.model._meta.app_label
+        context['model'] = self.model.__name__.lower()
+        context['title'] = self.model._meta.verbose_name
         context['object_list'] = data
         return context
 
@@ -60,7 +63,12 @@ class BaseCreate(BaseCrudMixin, CreateView):
     def get(self, request, form=None, *args, **kwargs):
         self.template_name = build_template_name(self.template_name, self.model, 'create')
         form = get_form(form, self.model)
-        return render(request, self.template_name,{'form': form})    
+        context = {
+            'form': form,
+            'model': self.model.__name__.lower(),
+            'app': self.model._meta.app_label
+        }
+        return render(request, self.template_name, context)    
 
     def post(self, request, form=None, *args, **kwargs):
         self.template_name = build_template_name(self.template_name, self.model, 'list')
@@ -77,7 +85,9 @@ class BaseCreate(BaseCrudMixin, CreateView):
         else:
             form = self.form_class()
             context = {
-                'form':form
+                'form':form,
+                'model': self.model.__name__.lower(),
+                'app': self.model._meta.app_label
             }
             return render(request, self.template_name, context)
 
@@ -122,6 +132,8 @@ class BaseUpdate(BaseCrudMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = {}
         context['object'] = get_object(self.model, self.kwargs['pk'])
+        context['app'] = self.model._meta.app_label
+        context['model'] = self.model.__name__.lower()
         return context    
 
     def get(self, request, form=None, *args, **kwargs):
@@ -172,6 +184,55 @@ class BaseDirectDelete(BaseCrudMixin, DeleteView):
             return response
 
         return super().dispatch(request, *args, **kwargs)    
+
+    def get_deleted_objects(self, objs, request):
+        from django.db import router
+        from django.utils.text import capfirst
+        from django.contrib.admin.utils import NestedObjects
+        
+        """
+        Find all objects related to ``objs`` that should also be deleted. ``objs``
+        must be a homogeneous iterable of objects (e.g. a QuerySet).
+        Return a nested list of strings suitable for display in the
+        template with the ``unordered_list`` filter.
+        """
+        try:
+            obj = objs[0]
+        except IndexError:
+            return [], {}, set(), []
+        else:
+            using = router.db_for_write(obj._meta.model)
+        collector = NestedObjects(using=using)
+        collector.collect(objs)
+        perms_needed = set()
+
+        def format_callback(obj):
+            model = obj.__class__
+            opts = obj._meta
+
+            no_edit_link = "%s: %s" % (capfirst(opts.verbose_name), obj)
+            # Don't display link to edit, because it either has no
+            # admin or is edited inline.
+            return no_edit_link
+
+        to_delete = collector.nested(format_callback)
+
+        protected = [format_callback(obj) for obj in collector.protected]
+        model_count = {
+            model._meta.verbose_name_plural: len(objs)
+            for model, objs in collector.model_objs.items()
+        }
+
+        return to_delete, model_count, perms_needed, protected
+
+    def get_context_data(self, **kwargs):
+        delete_objects, model_count, _, _ = self.get_deleted_objects([self.get_object()], self.request)
+        context = super(BaseDirectDelete, self).get_context_data(**kwargs)
+        context['app'] = self.model._meta.app_label
+        context['model'] = self.model.__name__.lower()
+        context['child_object'] = delete_objects[1:]
+        context['child_object_count'] = model_count
+        return context
 
 class BaseLogicDelete(BaseCrudMixin, DeleteView):
 

@@ -46,6 +46,7 @@ class BaseModel(models.Model):
     create_template = None
     update_template = None
     list_template = None
+    delete_template = None
     detail_template = None
 
     class Meta:
@@ -163,6 +164,7 @@ class BaseModel(models.Model):
                 "{0}/{1}".format(__app_name, self.get_direct_delete_url()),
                 BaseDirectDelete.as_view(
                     model=__model,
+                    template_name=__model.delete_template,
                     success_url=reverse_lazy("{0}".format(self.get_alias_list_url()))
                 ),
                 name=self.get_alias_direct_delete_url()
