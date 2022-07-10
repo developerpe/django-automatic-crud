@@ -1,6 +1,6 @@
 from django.apps import apps
 
-from automatic_crud.models import BaseModel
+from .models import BaseModel
 
 def register_models():
     """

@@ -1,11 +1,11 @@
 from django.db import models
 from django.urls import path,reverse_lazy
 
-from automatic_crud.utils import get_model
-from automatic_crud.data_types import *
-from automatic_crud.base_report import GetExcelReport
-from automatic_crud.views_crud import *
-from automatic_crud.views_crud_ajax import *
+from .utils import get_model
+from .data_types import *
+from .base_report import GetExcelReport
+from .views_crud import *
+from .views_crud_ajax import *
 
 class BaseModel(models.Model):
     """Model definition for BaseModel."""

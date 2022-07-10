@@ -4,9 +4,9 @@ import ast
 from django.http import HttpResponse,JsonResponse as JSR
 from django.core.serializers import serialize
 
-from automatic_crud.generics import BaseCrud
-from automatic_crud.utils import get_object,get_form
-from automatic_crud.response_messages import *
+from .generics import BaseCrud
+from .utils import get_object,get_form
+from .response_messages import *
 
 class BaseListAJAX(BaseCrud):
 

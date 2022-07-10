@@ -1,4 +1,4 @@
-from automatic_crud.register import register_models
+from .register import register_models
 
 urlpatterns = []
 

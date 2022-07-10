@@ -3,7 +3,7 @@ from typing import Dict, List
 from django.apps import apps
 from django.forms import models
 
-from automatic_crud.data_types import Instance, DjangoForm
+from .data_types import Instance, DjangoForm
 
 def get_model(__app_name:str, __model_name:str) -> Instance:
     # return the model corresponding to the application name and model name sent

@@ -1,6 +1,6 @@
 from django.http import JsonResponse as JR
 
-from automatic_crud.data_types import Instance, JsonResponse, DjangoForm
+from .data_types import Instance, JsonResponse, DjangoForm
 
 def jr_response(message:str, error: str, statud_code: int) -> JsonResponse:
     response = JR({'message': message, 'error': error})

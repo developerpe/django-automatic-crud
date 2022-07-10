@@ -5,8 +5,8 @@ from django.views.generic import (
 )
 from django.core.paginator import Paginator
 
-from automatic_crud.generics import BaseCrudMixin
-from automatic_crud.utils import get_object,get_form,build_template_name
+from .generics import BaseCrudMixin
+from .utils import get_object,get_form,build_template_name
 
 class BaseList(BaseCrudMixin, ListView):
 

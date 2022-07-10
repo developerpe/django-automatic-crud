@@ -12,8 +12,8 @@ try:
 except ImportError:
     from openpyxl.utils import get_column_letter
 
-from automatic_crud.generics import BaseCrudMixin
-from automatic_crud.utils import (
+from .generics import BaseCrudMixin
+from .utils import (
     get_model,get_model_fields_names,get_queryset
 )
 
