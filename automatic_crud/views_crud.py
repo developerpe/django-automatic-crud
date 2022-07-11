@@ -65,6 +65,7 @@ class BaseCreate(BaseCrudMixin, CreateView):
         form = get_form(form, self.model)
         context = {
             'form': form,
+            'title': self.model._meta.verbose_name,
             'model': self.model.__name__.lower(),
             'app': self.model._meta.app_label
         }
@@ -86,6 +87,7 @@ class BaseCreate(BaseCrudMixin, CreateView):
             form = self.form_class()
             context = {
                 'form':form,
+                'title': self.model._meta.verbose_name,
                 'model': self.model.__name__.lower(),
                 'app': self.model._meta.app_label
             }
@@ -108,6 +110,9 @@ class BaseDetail(BaseCrudMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = {}
         context['object'] = get_object(self.model,self.kwargs['pk'])
+        context['app'] = self.model._meta.app_label
+        context['model'] = self.model.__name__.lower()
+        context['title'] = self.model._meta.verbose_name
         return context  
 
     def get(self, request, form=None, *args, **kwargs):
@@ -134,6 +139,7 @@ class BaseUpdate(BaseCrudMixin, UpdateView):
         context['object'] = get_object(self.model, self.kwargs['pk'])
         context['app'] = self.model._meta.app_label
         context['model'] = self.model.__name__.lower()
+        context['title'] = self.model._meta.verbose_name
         return context    
 
     def get(self, request, form=None, *args, **kwargs):
@@ -165,7 +171,10 @@ class BaseUpdate(BaseCrudMixin, UpdateView):
             else:
                 form = self.form_class()
                 context = {
-                    'form':form
+                    'form':form,
+                    'title': self.model._meta.verbose_name,
+                    'model': self.model.__name__.lower(),
+                    'app': self.model._meta.app_label
                 }
                 return render(request, self.template_name, context)
         else:
@@ -230,6 +239,7 @@ class BaseDirectDelete(BaseCrudMixin, DeleteView):
         context = super(BaseDirectDelete, self).get_context_data(**kwargs)
         context['app'] = self.model._meta.app_label
         context['model'] = self.model.__name__.lower()
+        context['title'] = self.model._meta.verbose_name
         context['child_object'] = delete_objects[1:]
         context['child_object_count'] = model_count
         return context
